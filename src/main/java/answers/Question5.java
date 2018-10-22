@@ -29,7 +29,6 @@ public class Question5 {
 		int d[] = new int[totalValue + maxVal + 1];
 
 		for (int i = 1; i <= totalValue + maxVal; i++) {
-			g[i] = 0;
 			d[i] = n;
 		}
 
@@ -60,14 +59,16 @@ public class Question5 {
 
 		
 		int i = d[optCap];
-		ArrayList<Integer> sol = new ArrayList<>();
+		int count = 0;
+		
 		int solSum = 0;
 		while (solSum != optimal) {
 			solSum += w[i];
-			sol.add(w[i]);
+			count++;
+			
 			i = d[optCap - w[i]];
 		}
-		return sol.size();
+		return count;
 	}
 
 }
