@@ -10,7 +10,7 @@ public class Question3 {
 		int biggestFrequency = 0;
 		int [] frequency = new int[numNodes];
 
-		for (int i = 1; i <= numNodes; i++) {
+		for (int i = 0; i < numNodes; i++) {
 			int counter = 0;
 			for (Edge edge : edgeList) {
 				if (edge.getEdgeA() == i || edge.getEdgeB() == i) {

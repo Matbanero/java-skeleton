@@ -15,9 +15,6 @@ public class Question5 {
 				minVal = allowedAllocations[i];
 			}
 		}
-
-		System.out.println("Max weight: " + maxVal + "\nMin weight: " + minVal);
-
 		
 		int n = allowedAllocations.length;
 		int w[] = new int[allowedAllocations.length + 1];
@@ -59,18 +56,6 @@ public class Question5 {
 					d[y + w[i]] = i;
 				}
 			}
-
-			System.out.println("\nOptimal solution: " + optimal);
-			System.out.println('\n');
-			for (int k = 0; k < g.length; k++) {
-				System.out.println(k + ": " + g[k]);
-			}
-			System.out.println('\n');
-
-			for (int k = 0; k < g.length; k++) {
-				System.out.println(k + ": " + d[k]);
-			}
-			System.out.println('\n');
 		}
 
 		
