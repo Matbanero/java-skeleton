@@ -2,7 +2,7 @@ package answers;
 
 public class Question1 {
 	// Size of the int which will be used for further operations (used in the problem)
-	private final static int INT_SIZE = 16;
+	private final static int INT_SIZE = 32;
 	public static int bestMergedPortfolio(int[] portfolios) {
 		Node root = new Node();
 		int bestResult = 0;
@@ -31,8 +31,6 @@ public class Question1 {
 	}
 
 	public static void insertValue(Node r, int x) {
-		Node temp = r;
-
 		for (int i = INT_SIZE - 1; i >= 0; i--) {
 			int bit = (x & (1 << i));
 
@@ -45,8 +43,7 @@ public class Question1 {
 				if (r.left == null) {
 					r.left = new Node();
 				}
-				r = r.left;
-		
+				r = r.left;	
 			}
 		}
 	}
