@@ -1,60 +1,46 @@
 package answers;
 
-
-// TODO: COME BACK HERE!!!!
+import java.util.ArrayList;
 
 public class Question6 {
 
 	public static int shortestServerRoute(int numServers, int targetServer, int[][] times) {
-		int shortestDistance = Integer.MAX_VALUE;
 		int dist[] = new int[numServers];
-		boolean shortesPathVisited[] = new boolean[numServers];
-		dist[0] = 0;
-		shortesPathVisited[0] = false;
+		ArrayList<Integer> servers = new ArrayList<>();
 
-		// Initializing the distances and set of shorthest paths
-		for (int i = 1; i < numServers; i++) {
-			if (times[i] != times[0]) {
-				// Set distance to "infinity", it represents that we don't know real distance
-				// from source to given server
-				dist[i] = Integer.MAX_VALUE;
-				shortesPathVisited[i] = false;
-			}
+		for (int i = 0; i < numServers; i++) {
+			dist[i] = times[0][i];
+			servers.add(i);
 		}
 
-		for (int i = 0; i < numServers - 1; i++) {
-			// Finds the shortest path to the server (first server in first iteration)
-			int k = minDist(dist, shortesPathVisited);
-			shortesPathVisited[k] = true;
-
-			for (int j = 0; j < numServers; j++) {
-				if (!shortesPathVisited[j] && times[i][j] != 0 
-						&& 	dist[i] + times[i][j] < dist[j]) {
-						dist[j] = dist[i] + times[i][j];
-					}
-				if (dist[j] < shortestDistance) {
-					shortestDistance = dist[j];
+		dist[0] = 0;
+		while (!servers.isEmpty()) {
+			int minDist = Integer.MAX_VALUE;
+			int selectedServer = 0;
+			for (int i = 1; i < servers.size(); i++) {
+				if (minDist > dist[i]) {
+					minDist = dist[i];
+					selectedServer = i;
 				}
 			}
-		}
+			servers.remove(new Integer(selectedServer));
 
-		return shortestDistance;
-	}
+			if (selectedServer == targetServer) {
+				return dist[selectedServer];
+			}
 
-
-	public static int minDist(int dist[], boolean shortesPathVisited[]) {
-		
-		int min = Integer.MAX_VALUE;
-		// If all paths are visited or there is no smaller distance return -1
-		int min_i = -1;
-
-		for (int i = 0; i < dist.length; i++) {
-			if (shortesPathVisited[i] == false && dist[i] <= min) {
-				min = dist[i];
-				min_i = i;
+			for (int i = 0; i < numServers; i++) {
+				if (selectedServer == i) {
+					continue;
+				}
+				int newDist = dist[selectedServer] + times[selectedServer][i];
+				if (newDist < dist[i]) {
+					dist[i] = newDist;
+				}
+				
 			}
 		}
-		
-		return min_i;
+
+		return -1;
 	}
 }
