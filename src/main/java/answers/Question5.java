@@ -12,9 +12,15 @@ public class Question5 {
 				if(allowedAllocations[j] <= i) {
 					shareBank[i] = max(shareBank[i], shareBank[i - allowedAllocations[j]] + allowedAllocations[j]);
 				}
-				if(i == totalValue) {
-					count++;
-				}
+			}
+		}
+		int sol = shareBank[totalValue];
+		for (int i = allowedAllocations.length; i > 0 && sol > 0; i-- ) {
+			if (sol == shareBank[i]) {
+				continue;
+			} else {
+				count++;
+				sol = sol - allowedAllocations[i - 1];
 			}
 		}
 		return count;
