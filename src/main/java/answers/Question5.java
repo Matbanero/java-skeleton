@@ -15,6 +15,9 @@ public class Question5 {
 			}
 		}
 		int sol = shareBank[totalValue];
+		if (sol != totalValue) {
+			return 0;
+		}
 		for (int i = allowedAllocations.length; i > 0 && sol > 0; i-- ) {
 			if (sol == shareBank[i]) {
 				continue;
