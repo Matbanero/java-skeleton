@@ -2,18 +2,16 @@ package answers;
 
 public class Question1 {
 	// Size of the int which will be used for further operations (used in the problem)
-	private final static int INT_SIZE = 32;
+	private final static int INT_SIZE = 16;
 	public static int bestMergedPortfolio(int[] portfolios) {
 		Node root = new Node();
 		int bestResult = 0;
 
-		for (int i = 0; i < portfolios.length; i++) {
-			
+		for (int i = 0; i < portfolios.length; i++) {			
 			int result = findBestPortfolio(root, portfolios[i], INT_SIZE - 1);
 			if (result > bestResult) {
 				bestResult = result;
 			}
-
 			insertValue(root, portfolios[i]);
 		}
 		return bestResult;
