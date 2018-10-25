@@ -7,27 +7,26 @@ public class Question6 {
 	public static int shortestServerRoute(int numServers, int targetServer, int[][] times) {
 		int dist[] = new int[numServers];
 		ArrayList<Integer> servers = new ArrayList<>();
+		int source = 0;
+		dist[source] = 0;
 
 		for (int i = 0; i < numServers; i++) {
-			dist[i] = times[0][i];
+			if (i != source) {
+				dist[i] = Integer.MAX_VALUE;
+			}
 			servers.add(i);
 		}
 
-		dist[0] = 0;
 		while (!servers.isEmpty()) {
 			int minDist = Integer.MAX_VALUE;
 			int selectedServer = 0;
-			for (int i = 1; i < servers.size(); i++) {
+			for (int i = 0; i < servers.size(); i++) {
 				if (minDist > dist[i]) {
 					minDist = dist[i];
-					selectedServer = i;
+					selectedServer = servers.get(i);
 				}
 			}
 			servers.remove(new Integer(selectedServer));
-
-			if (selectedServer == targetServer) {
-				return dist[selectedServer];
-			}
 
 			for (int i = 0; i < numServers; i++) {
 				if (selectedServer == i) {
@@ -41,6 +40,6 @@ public class Question6 {
 			}
 		}
 
-		return -1;
+		return dist[targetServer];
 	}
 }
