@@ -1,32 +1,35 @@
 package answers;
 
-import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class Question6 {
 
 	public static int shortestServerRoute(int numServers, int targetServer, int[][] times) {
+		PriorityQueue<Integer> servers = new PriorityQueue<>();
 		int dist[] = new int[numServers];
-		ArrayList<Integer> servers = new ArrayList<>();
 		int source = 0;
 		dist[source] = 0;
+		int timeFromSource = times[0][targetServer];
+		
 
 		for (int i = 0; i < numServers; i++) {
+			if (times[i][targetServer] <= timeFromSource) {
+				servers.add(i);
+			}
 			if (i != source) {
 				dist[i] = Integer.MAX_VALUE;
 			}
-			servers.add(i);
+		}
+
+		// If there is only one server in queue (source server) return it's time
+		// as a shortest one to target.
+		if (servers.size() == 1) {
+			return timeFromSource;
 		}
 
 		while (!servers.isEmpty()) {
-			int minDist = Integer.MAX_VALUE;
-			int selectedServer = 0;
-			for (int i = 0; i < servers.size(); i++) {
-				if (minDist > dist[i]) {
-					minDist = dist[i];
-					selectedServer = servers.get(i);
-				}
-			}
-			servers.remove(new Integer(selectedServer));
+			
+			int selectedServer = servers.poll();
 
 			for (int i = 0; i < numServers; i++) {
 				if (selectedServer == i) {
