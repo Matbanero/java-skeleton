@@ -1,37 +1,57 @@
 package answers;
 
-
 public class Question5 {
 
+	private static int n;
+	private static int [] maxNoAllo;
+	private static int [] indexAllo;
+	private static int [] bestAllo;
+	private static int bestValue = 0;
+
 	public static int shareExchange(int[] allowedAllocations, int totalValue) {
-		int shareBank[] = new int[totalValue + 1];
+		n = allowedAllocations.length;
+		maxNoAllo = new int[n];
+		indexAllo = new int[n];
+		bestAllo = new int[n];
 
-		int count = 0;
-		for(int i = 0; i <= totalValue; i++) {
-			for(int j = 0; j < allowedAllocations.length; j++) {
-				if(allowedAllocations[j] <= i) {
-					shareBank[i] = max(shareBank[i], shareBank[i - allowedAllocations[j]] + allowedAllocations[j]);
-				}
-			}
+
+		for (int i = 0; i < n; i++) {
+			maxNoAllo[i] = (int)(totalValue / allowedAllocations[i]);
 		}
-		int sol = shareBank[totalValue];
-		int finalSol = shareBank[totalValue];
-		for (int i = allowedAllocations.length; i > 0 && sol > 0; i-- ) {
-			if (finalSol == shareBank[i] && i != totalValue) {
-				return 0;
-			} else if(sol == shareBank[i]) {
-				continue;
+
+		findBest(0, totalValue, allowedAllocations);
+		int numberOfSteps = 0;
+
+
+		for (int i = 0; i < n; i++) {
+			numberOfSteps += bestAllo[i];
+		}
+
+		return numberOfSteps;
+	}
+
+	private static void findBest(int allocation, int totalValue, int[] allowedAllocations) {
+		for (int i = 0; i <= maxNoAllo[allocation]; i++) {
+			indexAllo[allocation] = i;
+			if (allocation < n - 1) {
+				findBest(allocation + 1, totalValue, allowedAllocations);
 			} else {
-				count++;
-				sol = sol - allowedAllocations[i - 1];
+				int currVal = 0;
+				int currAllo = 0;
+				for (int j = 0; j < n; j++) {
+					currVal += indexAllo[j] * allowedAllocations[j];
+					currAllo += indexAllo[j] * allowedAllocations[j];
+				}
+
+				if (currVal > bestValue && currAllo <= totalValue) {
+					bestValue = currVal;
+					for (int j = 0; j < n; j++) {
+						bestAllo[j] = indexAllo[j];
+					}
+				}
+
 			}
 		}
-		return count;
 	}
-
-	private static int max(int i, int j) {
-		return (i > j) ? i : j;
-	}
-
 
 }
