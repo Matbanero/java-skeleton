@@ -17,10 +17,10 @@ public class Question3 {
 			}
 		}
 
-		if ((setA.size() + setB.size()) < numNodes) {
-			return numNodes - 2 * Math.min(setA.size(), setB.size());
-		}
+		// if ((setA.size() + setB.size()) < numNodes) {
+		return numNodes - 2 * Math.min(setA.size(), setB.size());
+		// }
 
-		return Math.abs(setA.size() - setB.size());
+		// return Math.abs(setA.size() - setB.size());
 	}
 }
