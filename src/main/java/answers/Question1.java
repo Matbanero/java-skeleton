@@ -1,27 +1,60 @@
 package answers;
 
 public class Question1 {
-	private final static int MAX_SCORE = 65535;
-	// Size of the int which will be used for further operations (used in the problem)
+	private static int BIT = 30;
 	public static int bestMergedPortfolio(int[] portfolios) {
-		int bestResult = 0;
 
-		// Using nested to loop to check n * (n-1) combinations of portfolios
-		for (int i = 0; i < portfolios.length; i++) {	
-			for (int j = i + 1; j < portfolios.length; j++) {
-				// Using binary xor to achieve the question requirement
-				int result = portfolios[i] ^ portfolios[j];
-				// Check if current result is better than best result
-				if (result > bestResult) {
-					bestResult = result;
-				}
-				// If our result is equal to max possible score, then we can stop searching further
-				if (result == MAX_SCORE) {
-					return bestResult;
-				}
-			}
+		int n = portfolios.length;
+		int result = 0;
+		Node root = new Node();
+		insertPortfolio(0, root);
+		for (int i = 0; i < n; i++) {
+			result = Math.max(result, query(portfolios[i], root));
+			insertPortfolio(portfolios[i], root);
 		}
-		return 0;
+		return result;
 	}
 
+	private static void insertPortfolio(int portfolio, Node r) {
+		for (int i = BIT; i >= 0; i--) {
+			int bit = (portfolio & (1 << i));
+			bit = bit > 0 ? 1 : 0;
+			if (r.getChild(bit) == null) {
+				r.setChild(bit);
+			}
+			r = r.getChild(bit);
+		}
+	}
+
+	private static int query(int portfolio, Node r) {
+		int comb = 0;
+		for (int i = BIT; i >= 0; i--) {
+			int bit = (portfolio & (1 << i));
+			bit = bit > 0 ? 1 : 0;
+			int notBit = bit == 0 ? 1 : 0;
+			if (r.getChild(notBit) != null) {
+				r = r.getChild(notBit);
+				comb |= (1 << i);
+			} else {
+				r = r.getChild(bit);
+			}
+		}
+		return comb;
+	}
+
+	private static class Node {
+		private Node[] children = new Node[2];
+		public Node() {
+			this.children[0] = null;
+			this.children[1] = null;
+		}
+
+		public Node getChild(int n) {
+			return this.children[n];
+		}
+
+		public void setChild (int n) {
+			this.children[n] = new Node();
+		}
+	}
 }

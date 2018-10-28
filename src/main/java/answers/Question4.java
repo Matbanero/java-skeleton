@@ -12,36 +12,43 @@ public class Question4 {
 		// Testing if there are possible solutions
 		for (int i = 0; i < rows.length; i++) {
 			
-			int count = 0;
-			ArrayList<String> machinesToFix = new ArrayList<>();
+			PriorityQueue<Integer> machinesToFix = new PriorityQueue<>();
 			PriorityQueue<Integer> bestCandidates = new PriorityQueue<>();
-			
+			int minSum = Integer.MAX_VALUE;
+
 			for (int j = 0; j < k; j++) {
 				// Test if the current machine is X or not
 				if (!rows[i][j].equals("X")) {
-					count++;
-					machinesToFix.add(rows[i][j]);
+					machinesToFix.add(Integer.parseInt(rows[i][j]));
 					
 					if (machinesToFix.size() == k) {
-						for(String m : machinesToFix) {
-								bestCandidates.add(Integer.parseInt(m));
+						for (int m = 0; m < numberMachines; m++) {
+							bestCandidates.add(machinesToFix.poll());
+						}
+
+					} else if (machinesToFix.size() >= numberMachines) {
+						// To many priority queues but hey...
+						PriorityQueue<Integer> temp = new PriorityQueue<>(machinesToFix);
+						PriorityQueue<Integer> tempToCopy = new PriorityQueue<>(machinesToFix);
+
+						int tempSum = 0;
+						for (int m = 0; m < numberMachines; m++) {
+							tempSum += temp.poll();
+						}
+
+						if (tempSum < minSum) {
+							minSum = tempSum;
+							bestCandidates.clear();
+							for (int m = 0; m < numberMachines; m++) {
+								bestCandidates.add(tempToCopy.poll());
+							}					
 						}
 					}
 
-				} else {
-					
-					if (machinesToFix.size() >= numberMachines) {
-						
-						for(String m : machinesToFix) {
-							bestCandidates.add(Integer.parseInt(m));
-						}	
-					}
-					
-					count = 0;
-					machinesToFix.clear();
-					
+				} else {	
+					machinesToFix.clear();					
 					if (j >= k - numberMachines) {
-						// Stop the loop
+						// Stop the loop - it is impossible to get another solution
 						j = k;
 					}
 				}
@@ -60,13 +67,11 @@ public class Question4 {
 			int sum = 0;
 
 			for (int i = 0; i < numberMachines; i++) {
-					// Parse int was here
 				sum += possibleSol.get(i);
 			}
 			
 			int curr = sum;
 			for (int i = numberMachines; i < possibleSol.size(); i++) {
-				// parse ints were here
 				curr += possibleSol.get(i) - possibleSol.get(i-numberMachines);
 				sum = Math.min(sum, curr);
 			}

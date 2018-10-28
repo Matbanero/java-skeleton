@@ -49,9 +49,9 @@ public class Question6 {
 			}
 
 			for (int i = 0; i < numServers; i++) {
-				if (selectedServer == i) {
-					continue;
-				}
+				// if (selectedServer == i) {
+				// 	continue;
+				// }
 				int newDist = dist[selectedServer] + times[selectedServer][i];
 				if (newDist < dist[i]) {
 					dist[i] = newDist;
