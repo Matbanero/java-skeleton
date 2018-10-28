@@ -1,7 +1,7 @@
 package answers;
 
 public class Question1 {
-	private static int BIT = 30;
+	private static int BIT = 32;
 	public static int bestMergedPortfolio(int[] portfolios) {
 
 		int n = portfolios.length;

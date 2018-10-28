@@ -18,7 +18,6 @@ public class Question5 {
 				}
 			}
 		}
-		System.out.println(shareBank[totalValue]);
 		int k = totalValue;
 
 		while (k >= 0) {

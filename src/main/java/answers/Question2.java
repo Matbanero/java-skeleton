@@ -1,47 +1,52 @@
 package answers;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 public class Question2 {
 
 	public static int equallyBalancedCashFlow(int[] cashflowIn, int[] cashflowOut) {
-		int sumStep1 = Arrays.stream(cashflowOut).sum();
-		int result = calculateDiff(cashflowIn.length, sumStep1, cashflowIn);
-		result = calculateDiff(cashflowOut.length, result, cashflowOut);
 
-		return result;
-	}
+		cashflowOut = Arrays.stream(cashflowOut).map(i -> -i).toArray();
+		int sumStep1 = Arrays.stream(cashflowIn).sum();
+		int sumStep2 = Arrays.stream(cashflowOut).sum();
 
-	private static int calculateDiff(int streamLen, int streamSum, int[] cashflow) {
-		boolean cashStep1[][] = new boolean[streamLen + 1][streamSum + 1];
+		ArrayList<Integer> total = new ArrayList<>();
+		total.addAll(Arrays.stream(cashflowIn).boxed().collect(Collectors.toList()));
+		total.addAll(Arrays.stream(cashflowOut).boxed().collect(Collectors.toList()));
+		Collections.sort(total);
 
-		for (int i = 0; i <= cashStep1.length; i++) {
-			cashStep1[i][0] = true;
-		}
+		int size = sumStep1 - sumStep2;
+		int offset = -sumStep2;
+		int offVal = -total.get(0);
 
-		for (int i = 1; i <= streamSum; i++) {
-			cashStep1[0][i] = false;
-		}
+		boolean[][] Q = new boolean[total.size()][size];
 
-		for (int i = 1; i <= cashStep1.length; i++) {
-			for (int j = 1; j <= streamSum; j++) {
-				cashStep1[i][j] = cashStep1[i - 1][j];
-
-				if (cashflow[i - 1] <= j) {
-					cashStep1[i][j] |= cashStep1[i - 1][j - cashflow[i - 1]];
+		for (int j = offset; j < size + offset; j++) {	
+			for (int i = 0; i < total.size(); i++) {
+				
+				int x = total.get(i) + offVal;
+				if (i == 0) {
+					Q[i][j - offset] = x == j - offset;
+				} else {
+					if (j - offset - x > 0) {
+						int aid = j - x - offset;
+						boolean aid2 = Q[i-1][aid];
+						Q[i][j - offset] = Q[i-1][j - offset] || x == j - offset || aid2;
+					} else {
+						Q[i][j - offset] = Q[i-1][j - offset] || x == j - offset;
+					}
 				}
 			}
 		}
 
-		int diff = Integer.MAX_VALUE;
-
-		for (int i = streamSum / 2; i >= 0; i--) {
-			if (cashStep1[cashflow.length][i] == true) {
-				diff = streamSum - 2 * i;
-			}
+		int i = offset;
+		while (!Q[total.size() - 1][i]) {
+			i++;
 		}
-
-		return diff;
+		return i - offset;
 	}
 
 }
