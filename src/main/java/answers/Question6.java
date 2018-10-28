@@ -12,13 +12,8 @@ public class Question6 {
 		PriorityQueue<Integer> servers = new PriorityQueue<>(new Comparator<Integer>() {
 			@Override
 			public int compare(Integer serv1, Integer serv2) {
-				// if (dist[serv1] < Integer.MAX_VALUE && dist[serv2] < Integer.MAX_VALUE) {
-				// 	return new Integer(dist[serv1] + times[serv1][targetServer]).compareTo(
-				// 				new Integer(dist[serv2] + times[serv2][targetServer]));
-				// } else {
 					return new Integer(dist[serv1]).compareTo(
 								new Integer(dist[serv2]));
-				// }
 			}
 		});
 
@@ -28,8 +23,7 @@ public class Question6 {
 		servers.add(0);
 		
 		for (int i = 0; i < numServers; i++) {
-			if ((times[i][targetServer] < timeFromSource)
-				 && (times[0][i] < timeFromSource)) {
+			if ((times[0][i] < timeFromSource)) {
 				servers.add(i);
 			}
 		}
@@ -49,9 +43,9 @@ public class Question6 {
 			}
 
 			for (int i = 0; i < numServers; i++) {
-				// if (selectedServer == i) {
-				// 	continue;
-				// }
+				if (selectedServer == i) {
+					continue;
+				}
 				int newDist = dist[selectedServer] + times[selectedServer][i];
 				if (newDist < dist[i]) {
 					dist[i] = newDist;
