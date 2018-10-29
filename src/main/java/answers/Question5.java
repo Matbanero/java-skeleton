@@ -9,6 +9,7 @@ public class Question5 {
 		allocations[0] = -1;
 		int count = 0;
 		
+		// Populate table in bottom up manner
 		for(int i = 1; i <= totalValue; i++) {
 			allocations[i] = allocations[i-1];
 			for(int j = 0; j < allowedAllocations.length; j++) {
@@ -18,8 +19,9 @@ public class Question5 {
 				}
 			}
 		}
+		
+		// Backtrack to the solution
 		int k = totalValue;
-
 		while (k >= 0) {
 			int x = allocations[k];
 			if (x == -1) break;
