@@ -3,33 +3,25 @@ package answers;
 public class Question5 {
 
 	public static int shareExchange(int[] allowedAllocations, int totalValue) {
-		int shareBank[] = new int[totalValue + 1];
-		shareBank[0] = 0;
-		int allocations[] = new int[totalValue + 1];
-		allocations[0] = -1;
-		int count = 0;
-		
-		// Populate table in bottom up manner
-		for(int i = 1; i <= totalValue; i++) {
-			allocations[i] = allocations[i-1];
-			for(int j = 0; j < allowedAllocations.length; j++) {
-				if(allowedAllocations[j] <= i) {
-					allocations[i] = j;
-					shareBank[i] = Math.max(shareBank[i], shareBank[i - allowedAllocations[j]] + allowedAllocations[j]);
+		int [] shareBank = new int [totalValue+1];
+		int sum = 1;
+
+		while (sum <= totalValue) {
+			int min = -1;
+			for (int i = 0 ; i < allowedAllocations.length ; i++) {
+				if (sum >= allowedAllocations[i] && shareBank[sum - allowedAllocations[i]] != -1) {
+					int temp = shareBank[sum - allowedAllocations[i]] + 1;
+					if (min < 0) {
+						min = temp;
+					} else {
+						min = Math.min(temp, min);
+					}
 				}
 			}
+			shareBank[sum] = min;
+			sum++;
 		}
-		
-		// Backtrack to the solution
-		int k = totalValue;
-		while (k >= 0) {
-			int x = allocations[k];
-			if (x == -1) break;
-			count++;
-			k -= allowedAllocations[allocations[k]];
-		}
-
-		return count;
+		return shareBank[totalValue];
 	}
 
 }
