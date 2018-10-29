@@ -1,7 +1,6 @@
 package answers;
 
 public class Question5 {
-
 	public static int shareExchange(int[] allowedAllocations, int totalValue) {
 		int [] shareBank = new int [totalValue+1];
 		int sum = 0;
@@ -12,11 +11,9 @@ public class Question5 {
 				if (sum >= allowedAllocations[i] 
 						&& shareBank[sum - allowedAllocations[i]] != -1) {
 					int temp = shareBank[sum - allowedAllocations[i]] + 1;
-					if (min < 0) {
-						min = temp;
-					} else {
-						min = Math.min(temp, min);
-					}
+				
+					min = min < 0 ? temp : (Math.min(temp, min));
+					
 				}
 			}
 			shareBank[sum] = min;
