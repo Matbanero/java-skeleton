@@ -3,7 +3,7 @@ package answers;
 public class Question1 {
 	public static int bestMergedPortfolio(int[] portfolios) {
 		// TODO comment it better
-		return partitionPortoflios(portfolios, 0, portfolios.length - 1, 0, portfolios.length - 1, 0, 30);
+		return partitionPortoflios(portfolios, 0, portfolios.length - 1, 0, portfolios.length - 1, 0, 14);
 	}
 
 	private static int partitionPortoflios(int[] portfolios, int lsmall, int lbig, int rsmall, int rbig,
