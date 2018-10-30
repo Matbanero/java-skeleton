@@ -1,26 +1,58 @@
 package answers;
 import java.util.ArrayList;
 import helpers.Edge;
+import java.util.*;
 
 public class Question3 {
 
+	private static Map<Integer,List<Integer>> colorMap = new HashMap<>();
+
 	public static int lowestExposureToExchanges(int numNodes, Edge[] edgeList) {
-		ArrayList<Integer> setA = new ArrayList<>();
-		ArrayList<Integer> setB = new ArrayList<>();
+		for (Edge edge : edgeList) {
+            if (colorMap.get(edge.getEdgeA()) == null) {
+            	colorMap.put(edge.getEdgeA(), new ArrayList<>()); 
+            }	
+            colorMap.get(edge.getEdgeA()).add(edge.getEdgeB());
 
-		for (Edge e : edgeList) {
-			if (!setA.contains(e.getEdgeA()) && !setB.contains(e.getEdgeA()) && !setA.contains(e.getEdgeB())) {
-				setA.add(e.getEdgeA());
-			}
-			if (!setB.contains(e.getEdgeB()) && !setA.contains(e.getEdgeB()) && ! setB.contains(e.getEdgeA())) {
-				setB.add(e.getEdgeB());
-			}
-		}
+            if (colorMap.get(edge.getEdgeB()) == null) {
+            	colorMap.put(edge.getEdgeB(), new ArrayList<>()); 
+            }
+            colorMap.get(edge.getEdgeB()).add(edge.getEdgeA());
+        }
 
-		// if ((setA.size() + setB.size()) < numNodes) {
-		return numNodes - 2 * Math.min(setA.size(), setB.size());
-		// }
+        int[] colors = new int[numNodes + 1];
+        for (int i = 1; i <= numNodes; i++){
+            if (colorMap.get(i) == null) {
+            	continue;
+            }
+            if (colors[i] == 0 && !colorSearch(i,colors,1)) {
+             	return -numNodes;
+            }
+        }
 
-		// return Math.abs(setA.size() - setB.size());
+        int minSetSize = Integer.MAX_VALUE;
+
+        for (int i = 1; i < colorMap.size(); i++) {
+        	if (colorMap.get(i) != null && colorMap.get(i).size() < minSetSize) {
+        		minSetSize = colorMap.get(i).size();
+        	}
+        }
+        return numNodes - 2 * minSetSize;
 	}
+
+	public static boolean colorSearch(int index, int[] colors, int color) {
+        if (colors[index] != 0) {
+         return color == colors[index];
+        }
+
+        int len = colorMap.get(index).size();
+        colors[index] = color;
+
+        for (int i = 0; i < len; i++) {
+            if (!colorSearch(colorMap.get(index).get(i),colors,-1*color)) {
+            	return false;
+            }
+        }
+        return true; 
+    }
 }
