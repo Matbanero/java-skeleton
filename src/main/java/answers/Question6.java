@@ -20,21 +20,21 @@ public class Question6 {
 		int timeFromSource = times[0][targetServer];
 		Arrays.fill(dist, Integer.MAX_VALUE);
 		dist[0] = 0;
-		servers.add(0);
+		// servers.add(0);
 		
 		// Possibly change 0 to 1 - looks like source server is added twice...
 		for (int i = 0; i < numServers; i++) {
 			// ERROR HERE
-			if ((times[0][i] < timeFromSource) && i < times[0].length) {
+			// if ((times[0][i] < timeFromSource) && i < times[0].length) {
 				servers.add(i);
-			}
+			// }
 		}
 
 		// If there is only one server in queue (source server) return it's time
 		// as a shortest one to target.
-		if (servers.size() == 1) {
-			return timeFromSource;
-		}
+		// if (servers.size() == 1) {
+		// 	return timeFromSource;
+		// }
 
 		// Otherwise do the dijikstra search
 		while (!servers.isEmpty()) {

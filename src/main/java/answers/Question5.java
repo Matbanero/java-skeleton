@@ -2,7 +2,11 @@ package answers;
 
 public class Question5 {
 	public static int shareExchange(int[] allowedAllocations, int totalValue) {
+		if (totalValue < 0) {
+			return 0;
+		}
 		int [] shareBank = new int [totalValue+1];
+		
 		int sum = 0;
 
 		while (++sum <= totalValue) {
