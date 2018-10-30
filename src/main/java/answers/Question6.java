@@ -22,8 +22,10 @@ public class Question6 {
 		dist[0] = 0;
 		servers.add(0);
 		
+		// Possibly change 0 to 1 - looks like source server is added twice...
 		for (int i = 0; i < numServers; i++) {
-			if ((times[0][i] < timeFromSource)) {
+			// ERROR HERE
+			if ((times[0][i] < timeFromSource) && i < times[0].length) {
 				servers.add(i);
 			}
 		}
