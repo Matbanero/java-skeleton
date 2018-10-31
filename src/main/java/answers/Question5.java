@@ -4,8 +4,8 @@ public class Question5 {
 	public static int shareExchange(int[] allowedAllocations, int totalValue) {
 		if (totalValue < 0) {
 			return 0;
-		}
-		int [] shareBank = new int [totalValue+1];
+		}	
+		int [] shareBank = new int [totalValue + 1];
 		
 		int sum = 0;
 
@@ -16,7 +16,11 @@ public class Question5 {
 						&& shareBank[sum - allowedAllocations[i]] != -1) {
 					int temp = shareBank[sum - allowedAllocations[i]] + 1;
 				
-					min = min < 0 ? temp : (Math.min(temp, min));
+					if (min < 0) {
+						min = temp;
+					} else {
+						min = Math.min(temp, min);
+					}
 					
 				}
 			}

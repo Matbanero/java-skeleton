@@ -8,45 +8,57 @@ import java.util.ArrayList;
 public class Question2 {
 
 	public static int equallyBalancedCashFlow(int[] cashflowIn, int[] cashflowOut) {
+		int minOut = 0;
+		for (int i = 0; i < cashflowOut.length; i++) {
+			if (cashflowOut[i] > minOut) {
+				minOut = cashflowOut[i];
+			}
+		}
+		final int offset = minOut + 1;
 
 		cashflowOut = Arrays.stream(cashflowOut).map(i -> -i).toArray();
-		int sumStep1 = Arrays.stream(cashflowIn).sum();
-		int sumStep2 = Arrays.stream(cashflowOut).sum();
-
 		ArrayList<Integer> total = new ArrayList<>();
 		total.addAll(Arrays.stream(cashflowIn).boxed().collect(Collectors.toList()));
 		total.addAll(Arrays.stream(cashflowOut).boxed().collect(Collectors.toList()));
 		Collections.sort(total);
+		// Shifting numbers to get rid of negatives
+		total.replaceAll(i -> i + offset);
 
-		int size = sumStep1 - sumStep2;
-		int offset = -sumStep2;
-		int offVal = -total.get(0);
+		int sum = total.stream().mapToInt(i -> i).sum();
 
-		boolean[][] Q = new boolean[total.size()][size];
+		boolean[][] Q = new boolean[total.size() + 1][sum + 1];
 
-		for (int j = offset; j < size + offset; j++) {	
-			for (int i = 0; i < total.size(); i++) {
+		for(int i = 0; i <= sum; i++){
+            Q[0][i] = false;
+        }
+
+		for (int j = 0; j <= sum; j++) {	
+			for (int i = 1; i <= total.size(); i++) {
 				
-				int x = total.get(i) + offVal;
-				if (i == 0) {
-					Q[i][j - offset] = x == j - offset;
-				} else {
-					if (j - offset - x > 0) {
-						int aid = j - x - offset;
-						boolean aid2 = Q[i-1][aid];
-						Q[i][j - offset] = Q[i-1][j - offset] || x == j - offset || aid2;
-					} else {
-						Q[i][j - offset] = Q[i-1][j - offset] || x == j - offset;
-					}
+				int x = total.get(i - 1);
+				
+				if (j - x >= 0) {
+					Q[i][j] = Q[i - 1][j] || x == j || Q[i - 1][j - x];
+				} else {		
+					Q[i][j] = Q[i - 1][j] || x == j;
 				}
 			}
 		}
 
-		int i = offset;
-		while (!Q[total.size() - 1][i]) {
-			i++;
+		
+		for (int i = 1; i <= total.size(); i++) {
+			for (int j = 0; j <= sum; j++) {		
+				int dummy = (total.size() - i) * offset + j;
+				if (dummy > sum) {
+					continue;
+				} else {
+					if (Q[total.size()][dummy]) {
+							return j;
+					}	
+				}
+			}
 		}
-		return i - offset;
+		return -1;
 	}
 
 }

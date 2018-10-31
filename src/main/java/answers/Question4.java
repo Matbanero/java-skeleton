@@ -23,7 +23,7 @@ public class Question4 {
 					
 					if (machinesToFix.size() == k) {
 						for (int m = 0; m < numberMachines; m++) {
-							bestCandidates.add(machinesToFix.poll());
+							bestCandidates.add(machinesToFix.poll()); // null ptr except
 						}
 
 					} else if (machinesToFix.size() >= numberMachines) {
