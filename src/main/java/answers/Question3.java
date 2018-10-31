@@ -12,18 +12,25 @@ public class Question3 {
 			return 0;
 		}
 
+		if (edgeList.length == 0) {
+			return numNodes;
+		}
+
 		int biggestEdge = 0;
 		 List<List<Integer>> graph = new ArrayList<>();
         
         for(int i = 0; i < numNodes; i++) {
-        	graph.add(new ArrayList<Integer>());
-        	if (edgeList[i].getEdgeA() > biggestEdge) {
+        	graph.add(new ArrayList<Integer>());   
+		}
+		
+		for (int i = 0; i < edgeList.length; i++) {
+			if (edgeList[i].getEdgeA() > biggestEdge) {
             	biggestEdge = edgeList[i].getEdgeA();
             }
             if (edgeList[i].getEdgeB() > biggestEdge) {
             	biggestEdge = edgeList[i].getEdgeB();
             }
-        }
+		}
 
         // If there is less nodes than edges 'show' - it is clearly an error
         if (numNodes < biggestEdge) {
