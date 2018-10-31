@@ -4,72 +4,86 @@ import helpers.Edge;
 import java.util.*;
 
 public class Question3 {
-
-	private static Map<Integer,List<Integer>> colorMap = new HashMap<>();
-
+	
+	private static boolean res = true;
 	public static int lowestExposureToExchanges(int numNodes, Edge[] edgeList) {
+	
 		if (numNodes < 0) {
 			return 0;
 		}
 
 		int biggestEdge = 0;
-		
-		for (Edge edge : edgeList) {
-            if (colorMap.get(edge.getEdgeA()) == null) {
-            	colorMap.put(edge.getEdgeA(), new ArrayList<>()); 
-            }	
-            colorMap.get(edge.getEdgeA()).add(edge.getEdgeB());
+		 List<List<Integer>> graph = new ArrayList<>();
+        
+        for(int i = 0; i < numNodes; i++) {
+        	graph.add(new ArrayList<Integer>());
+        	if (edgeList[i].getEdgeA() > biggestEdge) {
+            	biggestEdge = edgeList[i].getEdgeA();
+            }
+            if (edgeList[i].getEdgeB() > biggestEdge) {
+            	biggestEdge = edgeList[i].getEdgeB();
+            }
+        }
 
-            if (colorMap.get(edge.getEdgeB()) == null) {
-            	colorMap.put(edge.getEdgeB(), new ArrayList<>()); 
-            }
-			colorMap.get(edge.getEdgeB()).add(edge.getEdgeA());
-			
-			if (edge.getEdgeA() > biggestEdge) {
-            	biggestEdge = edge.getEdgeA();
-            }
-            if (edge.getEdgeB() > biggestEdge) {
-            	biggestEdge = edge.getEdgeB();
-            }
-		}
-		
-		if (numNodes < biggestEdge) {
+        // If there is less nodes than edges 'show' - it is clearly an error
+        if (numNodes < biggestEdge) {
 			return 0;
 		}
 
-        int[] colors = new int[numNodes + 1];
-        for (int i = 1; i <= numNodes; i++){
-            if (colorMap.get(i) == null) {
-            	continue;
-            }
-            if (i < colors.length && colors[i] == 0 && !colorSearch(i, colors, 1)) {
-             	return -numNodes;
-            }
+        // Populate graph
+        for(Edge edge : edgeList) {
+            graph.get(edge.getEdgeA() - 1).add(edge.getEdgeB() - 1);
+            graph.get(edge.getEdgeB() - 1).add(edge.getEdgeA() - 1);
         }
 
-        int minSetSize = Integer.MAX_VALUE;
+        // Split nodes to two sets (with use of edges)
+        Set<Integer> setA=new HashSet<>();
+        Set<Integer> setB=new HashSet<>();
 
-        for (int i = 1; i < colorMap.size(); i++) {
-        	if (colorMap.get(i) != null && colorMap.get(i).size() < minSetSize) {
-        		minSetSize = colorMap.get(i).size();
-        	}
-        }
-        return numNodes - 2 * minSetSize;
-	}
-
-	public static boolean colorSearch(int index, int[] colors, int color) {
-        if (colors[index] != 0) {  // do the checks
-         return color == colors[index];
-        }
-
-        int len = colorMap.get(index).size();
-        colors[index] = color;
-
-        for (int i = 0; i < len; i++) {
-            if (i < colors.length && !colorSearch(colorMap.get(index).get(i), colors, -1 * color)) {
-            	return false;
+        // Use DFS to 'color' the nodes
+        for(int i = 0; i < numNodes; i++) {
+            if (!setA.contains(i) && !setB.contains(i)) {
+            	DFS(setA, setB, graph, i);
             }
         }
-        return true; 
+
+        // If the graph is bipartite return score
+        if (res) {  	
+	        return numNodes - 2 * Math.min(setA.size(), setB.size());
+        } else {
+        	return 0;
+        }
+    }
+    
+    public static void DFS(Set<Integer> a, Set<Integer> b, List<List<Integer>> graph, int root) {
+        
+        // If we can't color graph return (one base case)
+        if (!res) {
+        	return;
+        }
+
+        // If there is no root node in both a and b, add root to a
+        if (!a.contains(root) && !b.contains(root)) {
+        	a.add(root);
+        }
+
+
+		// For all the nodes adjecent to the root progress DFS
+        for(int i = 0; i < graph.get(root).size(); i++) {
+            if (a.contains(root) && a.contains(graph.get(root).get(i))) {
+            	res = false;
+
+            } else if (b.contains(root) && b.contains(graph.get(root).get(i))) {
+            	res = false;
+
+            } else if (a.contains(root) && !b.contains(graph.get(root).get(i))) {
+                b.add(graph.get(root).get(i));
+                DFS(a, b, graph, graph.get(root).get(i));
+
+            } else if (b.contains(root) && !a.contains(graph.get(root).get(i))) {
+                a.add(graph.get(root).get(i));
+                DFS(a, b, graph, graph.get(root).get(i));
+            }
+        }
     }
 }

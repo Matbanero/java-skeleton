@@ -7,6 +7,9 @@ import java.util.Arrays;
 public class Question6 {
 	private static int[] dist;
 	public static int shortestServerRoute(int numServers, int targetServer, int[][] times) {
+		if (targetServer == 0) {
+			return 0;
+		}
 		dist = new int[numServers];
 		
 		PriorityQueue<Integer> servers = new PriorityQueue<>(new Comparator<Integer>() {
