@@ -42,7 +42,7 @@ public class Question3 {
             if (colorMap.get(i) == null) {
             	continue;
             }
-            if (colors[i] == 0 && !colorSearch(i, colors, 1)) {
+            if (i < colors.length && colors[i] == 0 && !colorSearch(i, colors, 1)) {
              	return -numNodes;
             }
         }
@@ -58,7 +58,7 @@ public class Question3 {
 	}
 
 	public static boolean colorSearch(int index, int[] colors, int color) {
-        if (colors[index] != 0) {
+        if (colors[index] != 0) {  // do the checks
          return color == colors[index];
         }
 

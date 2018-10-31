@@ -46,8 +46,9 @@ public class Question2 {
 		}
 
 		
-		for (int i = 1; i <= total.size(); i++) {
-			for (int j = 0; j <= sum; j++) {		
+		for (int j = 0; j <= sum; j++) {		
+			for (int i = 0; i < total.size(); i++) {
+				// up to i = total.size - 1 , that is at least one number as used to do the sum
 				int dummy = (total.size() - i) * offset + j;
 				if (dummy > sum) {
 					continue;

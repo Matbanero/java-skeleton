@@ -21,7 +21,10 @@ public class Question4 {
 				if (!rows[i][j].equals("X")) {
 					machinesToFix.add(Integer.parseInt(rows[i][j]));
 					
-					if (machinesToFix.size() == k) {
+					if (!machinesToFix.isEmpty() && machinesToFix.size() == k) {
+						if (numberMachines > k) {
+							return 0;
+						}
 						for (int m = 0; m < numberMachines; m++) {
 							bestCandidates.add(machinesToFix.poll()); // null ptr except
 						}
