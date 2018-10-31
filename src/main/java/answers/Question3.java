@@ -66,7 +66,7 @@ public class Question3 {
         colors[index] = color;
 
         for (int i = 0; i < len; i++) {
-            if (!colorSearch(colorMap.get(index).get(i),colors,-1*color)) {
+            if (i < colors.length && !colorSearch(colorMap.get(index).get(i), colors, -1 * color)) {
             	return false;
             }
         }
